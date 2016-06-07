@@ -77,11 +77,9 @@ class InteractiveChart extends BaseComponent {
           selected: 1
           //enabled: false
         },
-
         title: {
           text: this.state.data.symbol + ' Historical Price'
         },
-
         yAxis: [
           {
             title: {
@@ -100,7 +98,6 @@ class InteractiveChart extends BaseComponent {
             lineWidth: 2
           }
         ],
-
         series: [
           {
             type: 'candlestick',
@@ -150,8 +147,10 @@ class InteractiveChart extends BaseComponent {
   render () {
     return (
       <div className="interactiveChart">
-        <QueryForm onQuerySubmit={this.handleQuerySubmit}/>
-        <div id="chartContainer"></div>
+        <div className="row">
+          <QueryForm onQuerySubmit={this.handleQuerySubmit}/>
+        </div>
+        <div className="row" id="chartContainer"></div>
       </div>
     );
   }
@@ -159,7 +158,7 @@ class InteractiveChart extends BaseComponent {
 
 ReactDOM.render(
   <InteractiveChart url="/history"/>,
-  document.getElementById('container')
+  document.getElementById('main')
 );
 
 module.exports = InteractiveChart;

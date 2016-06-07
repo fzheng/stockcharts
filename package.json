@@ -4,6 +4,7 @@
   "description": "Interactive Stock Charts powered by React and HighCharts with Markitondemand as data provider",
   "main": "server/index.js",
   "dependencies": {
+    "bootstrap": "^3.3.6",
     "hapi": "^13.4.1",
     "highcharts": "^4.2.5",
     "inert": "^4.0.0",
@@ -22,11 +23,13 @@
     "babel-preset-react": "^6.5.0",
     "css-loader": "^0.23.1",
     "extract-text-webpack-plugin": "^1.0.1",
+    "file-loader": "^0.8.5",
     "html-webpack-plugin": "^2.19.0",
     "node-sass": "^3.7.0",
     "postcss-loader": "^0.8.2",
     "sass-loader": "^3.2.0",
     "style-loader": "^0.13.1",
+    "url-loader": "^0.5.7",
     "webpack": "^1.13.1"
   },
   "scripts": {

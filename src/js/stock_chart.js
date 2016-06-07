@@ -1,30 +1,32 @@
-const React = require('react');
-const Highcharts = require('highcharts/highstock');
+import React from "react";
+import BaseComponent from "./base";
+import Highcharts from "highcharts/highstock";
 
-const StockChart = React.createClass({
-  // When the DOM is ready, create the chart.
-  componentDidMount: function () {
-    // Extend Highcharts with modules
+class StockChart extends BaseComponent {
+  constructor (props) {
+    super(props);
+    this.state = {};
+    this._bind('componentDidMount', 'componentWillUnmount');
+  }
+
+  componentDidMount () {
     if (this.props.modules) {
       this.props.modules.forEach(function (module) {
         module(Highcharts);
       });
     }
-    // Set container which the chart should render to.
     this.chart = new Highcharts[this.props.type || "Chart"](this.props.container, this.props.options);
-  },
-
-  //Destroy chart before unmount.
-  componentWillUnmount: function () {
-    this.chart.destroy();
-  },
-
-  //Create the div which the chart will be rendered to.
-  render: function () {
-    return React.createElement('div', {
-      id: this.props.container
-    });
   }
-});
+
+  componentWillUnmount () {
+    this.chart.destroy();
+  }
+
+  render () {
+    return (
+      <div id={this.props.container}></div>
+    );
+  }
+}
 
 module.exports = StockChart;

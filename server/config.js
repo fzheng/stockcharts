@@ -8,7 +8,7 @@ module.exports = {
   "services": {
     "time_series": {
       "url": "http://dev.markitondemand.com/Api/v2/InteractiveChart/json",
-      "default_duration": 730
+      "default_duration": 365
     }
   }
 };

@@ -24,31 +24,36 @@ class QueryForm extends BaseComponent {
     if (!symbol) {
       return;
     }
-    const duration = parseInt(this.state.duration.trim());
+    const duration = parseInt(this.state.duration);
     const query = {symbol: symbol};
     if (duration > 0) {
       query.duration = duration;
     }
     this.props.onQuerySubmit(query);
-    this.setState({symbol: '', duration: ''});
   }
 
   render () {
     return (
-      <form className="queryForm" onSubmit={this.handleSubmit}>
-        <input
-          type="text"
-          placeholder="Symbol"
-          value={this.state.symbol}
-          onChange={this.handleSymbolChange}
+      <form className="queryForm form-inline" onSubmit={this.handleSubmit}>
+        <div className="form-group">
+          <input
+            type="text"
+            className="form-control"
+            placeholder="Symbol"
+            value={this.state.symbol}
+            onChange={this.handleSymbolChange}
           />
-        <input
-          type="number"
-          placeholder="Number of Days"
-          value={this.state.duration}
-          onChange={this.handleDurationChange}
+        </div>
+        <div className="form-group">
+          <input
+            type="number"
+            className="form-control"
+            placeholder="Days"
+            value={this.state.duration}
+            onChange={this.handleDurationChange}
           />
-        <input type="submit" value="Post"/>
+        </div>
+        <button type="submit" className="btn btn-primary">Query</button>
       </form>
     );
   }
