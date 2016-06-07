@@ -1,4 +1,4 @@
 'use strict';
 
-import './js/comment_box';
+import './js/interative_chart';
 require("./css/base");

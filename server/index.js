@@ -1,9 +1,18 @@
 'use strict';
 
 const Hapi = require('hapi');
-const server = new Hapi.Server();
+const Path = require('path');
 const config = require('./config');
 const port = process.env.PORT || config.server.port;
+const server = new Hapi.Server({
+  connections: {
+    routes: {
+      files: {
+        relativeTo: Path.join(__dirname, '../dist')
+      }
+    }
+  }
+});
 
 server.connection({
   host: config.server.host,
@@ -11,6 +20,12 @@ server.connection({
 });
 
 server.register([
+  {
+    register: require('inert')
+  },
+  {
+    register: require('./routes/static.js')
+  },
   {
     register: require('./routes/history.js')
   }
@@ -21,7 +36,7 @@ server.register([
 });
 
 server.start(function () {
-  console.log('Server Starts at port: ' + port);
+  console.log('Server starts at port: ' + port);
 });
 
 module.exports = server;

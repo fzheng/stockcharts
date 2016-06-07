@@ -6,6 +6,7 @@
   "dependencies": {
     "hapi": "^13.4.1",
     "highcharts": "^4.2.5",
+    "inert": "^4.0.0",
     "joi": "^9.0.0-3",
     "jquery": "^2.2.4",
     "marked": "^0.3.5",

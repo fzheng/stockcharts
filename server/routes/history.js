@@ -7,7 +7,7 @@ const timeSeriesService = require('../services/time_series_service');
 exports.register = function (server, options, next) {
   server.route({
     method: 'POST',
-    path: '/history/{ticker*}',
+    path: '/history',
     config: {
       validate: {
         payload: {
