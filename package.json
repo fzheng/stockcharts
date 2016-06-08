@@ -1,6 +1,6 @@
 {
   "name": "stockcharts",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Interactive Stock Charts powered by React and HighCharts with Markitondemand as data provider",
   "main": "server/index.js",
   "dependencies": {
