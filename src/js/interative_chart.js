@@ -11,57 +11,57 @@ class InteractiveChart extends BaseComponent {
   constructor (props) {
     super(props);
     this.state = {data: []};
-    this._bind('handleQuerySubmit', '_fixDate', '_getOHLC', '_getVolume', 'renderChart');
+    this._bind('handleQuerySubmit', 'renderChart');
   }
 
-  _fixDate (dateIn) {
-    const dat = new Date(dateIn);
-    return Date.UTC(dat.getFullYear(), dat.getMonth(), dat.getDate());
-  };
-
-  _getOHLC (json) {
-    const dates = json.Dates || [];
-    const elements = json.Elements || [];
-    const chartSeries = [];
-
-    if (elements[0]) {
-      for (let i = 0, datLen = dates.length; i < datLen; i++) {
-        const dat = this._fixDate(dates[i]);
-        const pointData = [
-          dat,
-          elements[0].DataSeries['open'].values[i],
-          elements[0].DataSeries['high'].values[i],
-          elements[0].DataSeries['low'].values[i],
-          elements[0].DataSeries['close'].values[i]
-        ];
-        chartSeries.push(pointData);
-      }
-    }
-    return chartSeries;
-  };
-
-  _getVolume (json) {
-    const dates = json.Dates || [];
-    const elements = json.Elements || [];
-    const chartSeries = [];
-
-    if (elements[1]) {
-      for (let i = 0, datLen = dates.length; i < datLen; i++) {
-        const dat = this._fixDate(dates[i]);
-        const pointData = [
-          dat,
-          elements[1].DataSeries['volume'].values[i]
-        ];
-        chartSeries.push(pointData);
-      }
-    }
-    return chartSeries;
-  };
-
   renderChart (data) {
+    function _fixDate (dateIn) {
+      const dat = new Date(dateIn);
+      return Date.UTC(dat.getFullYear(), dat.getMonth(), dat.getDate());
+    }
+
+    function _getOHLC (json) {
+      const dates = json.Dates || [];
+      const elements = json.Elements || [];
+      const chartSeries = [];
+
+      if (elements[0]) {
+        for (let i = 0, datLen = dates.length; i < datLen; i++) {
+          const dat = _fixDate(dates[i]);
+          const pointData = [
+            dat,
+            elements[0].DataSeries['open'].values[i],
+            elements[0].DataSeries['high'].values[i],
+            elements[0].DataSeries['low'].values[i],
+            elements[0].DataSeries['close'].values[i]
+          ];
+          chartSeries.push(pointData);
+        }
+      }
+      return chartSeries;
+    }
+
+    function _getVolume (json) {
+      const dates = json.Dates || [];
+      const elements = json.Elements || [];
+      const chartSeries = [];
+
+      if (elements[1]) {
+        for (let i = 0, datLen = dates.length; i < datLen; i++) {
+          const dat = _fixDate(dates[i]);
+          const pointData = [
+            dat,
+            elements[1].DataSeries['volume'].values[i]
+          ];
+          chartSeries.push(pointData);
+        }
+      }
+      return chartSeries;
+    }
+
     // split the data set into ohlc and volume
-    const ohlc = this._getOHLC(data);
-    const volume = this._getVolume(data);
+    const ohlc = _getOHLC(data);
+    const volume = _getVolume(data);
 
     // set the allowed units for data grouping
     const groupingUnits = [
@@ -126,7 +126,7 @@ class InteractiveChart extends BaseComponent {
     });
 
     ReactDOM.render(element, document.getElementById('chartContainer'));
-  };
+  }
 
   handleQuerySubmit (query) {
     this.setState({data: query});

@@ -20,10 +20,11 @@ class QueryForm extends BaseComponent {
 
   handleSubmit (e) {
     e.preventDefault();
-    const symbol = this.state.symbol.trim();
+    let symbol = this.state.symbol.trim();
     if (!symbol) {
       return;
     }
+    symbol = symbol.toUpperCase();
     const duration = parseInt(this.state.duration);
     const query = {symbol: symbol};
     if (duration > 0) {
