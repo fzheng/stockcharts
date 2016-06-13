@@ -1,20 +1,21 @@
-'use strict';
-
 import React from "react";
-import ReactDOM from "react-dom";
 import BaseComponent from "./base";
-import QueryForm from "./query_form";
 import StockChart from "./stock_chart";
-import $ from "jquery";
 
 class InteractiveChart extends BaseComponent {
   constructor (props) {
     super(props);
-    this.state = {data: []};
-    this._bind('handleQuerySubmit', 'renderChart');
+    this.state = {symbol: '', data: {}};
   }
 
-  renderChart (data) {
+  componentWillReceiveProps (nextProps) {
+    this.setState({symbol: nextProps.symbol, data: nextProps.data});
+  }
+
+  render () {
+    const data = this.props.data;
+    const symbol = this.props.symbol;
+
     function _fixDate (dateIn) {
       const dat = new Date(dateIn);
       return Date.UTC(dat.getFullYear(), dat.getMonth(), dat.getDate());
@@ -69,7 +70,7 @@ class InteractiveChart extends BaseComponent {
       ['month', [1, 2, 3, 4, 6]]
     ];
 
-    const element = React.createElement(StockChart, {
+    const chartNode = React.createElement(StockChart, {
       container: 'stockChart',
       type: 'stockChart',
       options: {
@@ -78,7 +79,7 @@ class InteractiveChart extends BaseComponent {
           //enabled: false
         },
         title: {
-          text: this.state.data.symbol + ' Historical Price'
+          text: symbol + ' Historical Price'
         },
         yAxis: [
           {
@@ -101,7 +102,7 @@ class InteractiveChart extends BaseComponent {
         series: [
           {
             type: 'candlestick',
-            name: this.state.data.symbol,
+            name: symbol,
             data: ohlc,
             color: 'red',
             upColor: 'green',
@@ -125,40 +126,12 @@ class InteractiveChart extends BaseComponent {
       }
     });
 
-    ReactDOM.render(element, document.getElementById('chartContainer'));
-  }
-
-  handleQuerySubmit (query) {
-    this.setState({data: query});
-    $.ajax({
-      url: this.props.url,
-      dataType: 'json',
-      type: 'POST',
-      data: query,
-      success: function (data) {
-        this.renderChart(data);
-      }.bind(this),
-      error: function (xhr, status, err) {
-        console.error(this.props.url, status, err.toString());
-      }.bind(this)
-    });
-  }
-
-  render () {
     return (
       <div className="interactiveChart">
-        <div className="row">
-          <QueryForm onQuerySubmit={this.handleQuerySubmit}/>
-        </div>
-        <div className="row" id="chartContainer"></div>
+        {chartNode}
       </div>
     );
   }
 }
-
-ReactDOM.render(
-  <InteractiveChart url="/history"/>,
-  document.getElementById('main')
-);
 
 module.exports = InteractiveChart;

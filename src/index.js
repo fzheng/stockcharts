@@ -1,5 +1,5 @@
 'use strict';
 
 import 'bootstrap/dist/css/bootstrap.css';
-import './js/interative_chart';
+import './js/main';
 require("./css/base");

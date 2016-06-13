@@ -5,7 +5,6 @@ import Highcharts from "highcharts/highstock";
 class StockChart extends BaseComponent {
   constructor (props) {
     super(props);
-    this.state = {};
     this._bind('componentDidMount', 'componentWillUnmount');
   }
 
