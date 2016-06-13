@@ -5,21 +5,28 @@ import Highcharts from "highcharts/highstock";
 class StockChart extends BaseComponent {
   constructor (props) {
     super(props);
-    this.state = {};
-    this._bind('componentDidMount', 'componentWillUnmount');
+    this._bind('renderChart');
   }
 
-  componentDidMount () {
-    if (this.props.modules) {
-      this.props.modules.forEach(function (module) {
-        module(Highcharts);
-      });
-    }
-    this.chart = new Highcharts[this.props.type || "Chart"](this.props.container, this.props.options);
+  componentWillReceiveProps (nextProps) {
+    this.props = nextProps;
+    this.renderChart(this.props);
   }
 
   componentWillUnmount () {
     this.chart.destroy();
+  }
+
+  renderChart (props) {
+    if (props.modules) {
+      props.modules.forEach(function (module) {
+        module(Highcharts);
+      });
+    }
+    this.chart = new Highcharts[props.type || "Chart"](
+      props.container,
+      props.options
+    );
   }
 
   render () {

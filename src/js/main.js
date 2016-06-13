@@ -4,17 +4,33 @@ import React from "react";
 import ReactDOM from "react-dom";
 import BaseComponent from "./base";
 import QueryForm from "./query_form";
-import StockChart from "./stock_chart";
+import InteractiveChart from "./interactive_chart";
 import $ from "jquery";
 
-class InteractiveChart extends BaseComponent {
+class Main extends BaseComponent {
   constructor (props) {
     super(props);
-    this.state = {data: []};
-    this._bind('handleQuerySubmit', 'renderChart');
+    this.state = {data: {}, symbol: ''};
+    this._bind('handleQuerySubmit', 'updateChart');
   }
 
-  renderChart (data) {
+  handleQuerySubmit (query) {
+    this.setState({symbol: query.symbol});
+    $.ajax({
+      url: this.props.url,
+      dataType: 'json',
+      type: 'POST',
+      data: query,
+      success: function (data) {
+        this.updateChart(query.symbol, data);
+      }.bind(this),
+      error: function (xhr, status, err) {
+        console.error(this.props.url, status, err.toString());
+      }.bind(this)
+    });
+  }
+
+  updateChart (symbol, data) {
     function _fixDate (dateIn) {
       const dat = new Date(dateIn);
       return Date.UTC(dat.getFullYear(), dat.getMonth(), dat.getDate());
@@ -69,16 +85,14 @@ class InteractiveChart extends BaseComponent {
       ['month', [1, 2, 3, 4, 6]]
     ];
 
-    const element = React.createElement(StockChart, {
-      container: 'stockChart',
-      type: 'stockChart',
-      options: {
+    this.setState({
+      data: {
         rangeSelector: {
           selected: 1
           //enabled: false
         },
         title: {
-          text: this.state.data.symbol + ' Historical Price'
+          text: symbol + ' Historical Price'
         },
         yAxis: [
           {
@@ -101,7 +115,7 @@ class InteractiveChart extends BaseComponent {
         series: [
           {
             type: 'candlestick',
-            name: this.state.data.symbol,
+            name: symbol,
             data: ohlc,
             color: 'red',
             upColor: 'green',
@@ -124,41 +138,25 @@ class InteractiveChart extends BaseComponent {
         }
       }
     });
-
-    ReactDOM.render(element, document.getElementById('chartContainer'));
-  }
-
-  handleQuerySubmit (query) {
-    this.setState({data: query});
-    $.ajax({
-      url: this.props.url,
-      dataType: 'json',
-      type: 'POST',
-      data: query,
-      success: function (data) {
-        this.renderChart(data);
-      }.bind(this),
-      error: function (xhr, status, err) {
-        console.error(this.props.url, status, err.toString());
-      }.bind(this)
-    });
   }
 
   render () {
     return (
-      <div className="interactiveChart">
+      <div className="container">
         <div className="row">
           <QueryForm onQuerySubmit={this.handleQuerySubmit}/>
         </div>
-        <div className="row" id="chartContainer"></div>
+        <div className="row">
+          <InteractiveChart symbol={this.state.symbol} data={this.state.data}/>
+        </div>
       </div>
     );
   }
 }
 
 ReactDOM.render(
-  <InteractiveChart url="/history"/>,
+  <Main url="/history"/>,
   document.getElementById('main')
 );
 
-module.exports = InteractiveChart;
+module.exports = Main;
