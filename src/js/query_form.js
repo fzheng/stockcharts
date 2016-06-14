@@ -36,7 +36,7 @@ class QueryForm extends BaseComponent {
 
   render () {
     return (
-      <form className="queryForm form-inline" onSubmit={this.handleSubmit}>
+      <form className="queryForm well form-inline" onSubmit={this.handleSubmit}>
         <div className="form-group">
           <input
             type="text"

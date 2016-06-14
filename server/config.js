@@ -8,7 +8,9 @@ module.exports = {
   "memcached": {
     "location": "0.0.0.0:11211",
     "options": {},
-    "expiration": 28800
+    "expiry": {
+      "history": 28800
+    }
   },
   "services": {
     "time_series": {

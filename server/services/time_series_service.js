@@ -2,9 +2,8 @@
 
 const request = require('request');
 const config = require('../config');
-const Memcached = require('memcached');
+const memcachedService = require('./memcached_service');
 
-const memcached = new Memcached(config.memcached.location, config.memcached.options);
 
 function getInputParams (symbol, duration) {
   if (!duration) {
@@ -28,10 +27,6 @@ function getInputParams (symbol, duration) {
   };
 }
 
-function qetMemcached (symbol, cb) {
-  memcached.get(symbol, cb);
-}
-
 function makeRequest (qsString, cb) {
   request({
     method: 'GET',
@@ -53,32 +48,25 @@ function makeRequest (qsString, cb) {
 function getTimeSeriesChart (req, cb) {
   const symbol = req.symbol;
   const duration = req.duration;
-  qetMemcached(symbol, function (err, data) {
+  const memcachedKey = symbol + ':history';
+
+  memcachedService.getCache(memcachedKey, function (err, data) {
     if (data) {
-      console.log("[Memcached] returns '" + symbol + "' historical data");
       return cb(null, data);
-    }
-    if (err) {
-      console.error(err);
     }
     let qsString;
     try {
       qsString = JSON.stringify(getInputParams(symbol, duration));
     } catch (e) {
       console.error(e);
-      cb(e);
+      return cb(e);
     }
     makeRequest(qsString, function (reqError, reqData) {
       if (reqError) {
         return cb(reqError);
       }
       console.log("[Request] gets '" + symbol + "' historical data");
-      memcached.set(symbol, reqData, config.memcached.expiration, function (err) {
-        if (err) {
-          console.error(err);
-        } else {
-          console.log("[Memcached] sets '" + symbol + "' historical data");
-        }
+      memcachedService.setCache(memcachedKey, reqData, config.memcached.expiry.history, function (err) {
         cb(null, reqData); // won't output memcached error
       });
     });
