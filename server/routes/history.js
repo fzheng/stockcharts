@@ -2,7 +2,7 @@
 
 const Joi = require('joi');
 const utils = require('../../utils/utils');
-const timeSeriesService = require('../services/time_series_service');
+const stockServices = require('../services/stock_services');
 
 
 exports.register = function (server, options, next) {
@@ -26,7 +26,7 @@ exports.register = function (server, options, next) {
       if (duration) {
         req.duration = duration;
       }
-      timeSeriesService.getTimeSeriesChart(req, function (err, data) {
+      stockServices.getTimeSeriesChart(req, function (err, data) {
         reply(err, data);
       });
     }
