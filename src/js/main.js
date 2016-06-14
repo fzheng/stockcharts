@@ -1,11 +1,12 @@
 'use strict';
 
+import $ from "jquery";
 import React from "react";
 import ReactDOM from "react-dom";
 import BaseComponent from "./base";
 import QueryForm from "./query_form";
-import InteractiveChart from "./interactive_chart";
-import $ from "jquery";
+import QueryResult from "./query_result";
+
 
 class Main extends BaseComponent {
   constructor (props) {
@@ -147,7 +148,7 @@ class Main extends BaseComponent {
           <QueryForm onQuerySubmit={this.handleQuerySubmit}/>
         </div>
         <div className="row">
-          <InteractiveChart symbol={this.state.symbol} data={this.state.data}/>
+          <QueryResult symbol={this.state.symbol} data={this.state.data}/>
         </div>
       </div>
     );

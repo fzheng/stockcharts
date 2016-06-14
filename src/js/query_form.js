@@ -3,6 +3,7 @@
 import React from "react";
 import BaseComponent from "./base";
 
+
 class QueryForm extends BaseComponent {
   constructor (props) {
     super(props);
@@ -42,6 +43,7 @@ class QueryForm extends BaseComponent {
             className="form-control"
             placeholder="Symbol"
             value={this.state.symbol}
+            style={{textTransform: "uppercase"}}
             onChange={this.handleSymbolChange}
           />
         </div>
@@ -51,6 +53,7 @@ class QueryForm extends BaseComponent {
             className="form-control"
             placeholder="Days"
             value={this.state.duration}
+            style={{display: "none"}}
             onChange={this.handleDurationChange}
           />
         </div>

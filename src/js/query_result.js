@@ -1,8 +1,11 @@
+'use strict';
+
 import React from "react";
 import BaseComponent from "./base";
 import StockChart from "./stock_chart";
 
-class InteractiveChart extends BaseComponent {
+
+class QueryResult extends BaseComponent {
   constructor (props) {
     super(props);
     this.state = {data: {}};
@@ -19,4 +22,4 @@ class InteractiveChart extends BaseComponent {
   }
 }
 
-module.exports = InteractiveChart;
+module.exports = QueryResult;

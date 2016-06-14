@@ -4,6 +4,7 @@ const Joi = require('joi');
 const utils = require('../../utils/utils');
 const timeSeriesService = require('../services/time_series_service');
 
+
 exports.register = function (server, options, next) {
   server.route({
     method: 'POST',
@@ -25,12 +26,8 @@ exports.register = function (server, options, next) {
       if (duration) {
         req.duration = duration;
       }
-      timeSeriesService.makeRequest(req, function (err, data) {
-        if (err) {
-          reply(err, data);
-        } else {
-          reply(null, data);
-        }
+      timeSeriesService.getTimeSeriesChart(req, function (err, data) {
+        reply(err, data);
       });
     }
   });

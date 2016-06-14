@@ -1,6 +1,6 @@
 {
   "name": "stockcharts",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Interactive Stock Charts powered by React and HighCharts with Markitondemand as data provider",
   "main": "server/index.js",
   "dependencies": {
@@ -11,6 +11,7 @@
     "joi": "^9.0.0-5",
     "jquery": "^2.2.4",
     "marked": "^0.3.5",
+    "memcached": "^2.2.2",
     "react": "^0.14.8",
     "react-dom": "^0.14.8",
     "request": "^2.72.0"

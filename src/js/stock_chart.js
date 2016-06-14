@@ -1,6 +1,9 @@
+'use strict';
+
 import React from "react";
 import BaseComponent from "./base";
 import Highcharts from "highcharts/highstock";
+
 
 class StockChart extends BaseComponent {
   constructor (props) {
