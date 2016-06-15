@@ -1,8 +1,8 @@
 'use strict';
 
-const config = require('../config');
+const config = require('config');
 const Memcached = require('memcached');
-const memcached = new Memcached(config.memcached.location, config.memcached.options);
+const memcached = new Memcached(config.get('memcached.location'), config.get('memcached.options'));
 
 
 module.exports = {

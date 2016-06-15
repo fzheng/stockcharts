@@ -5,6 +5,7 @@
   "main": "server/index.js",
   "dependencies": {
     "bootstrap": "^3.3.6",
+    "config": "^1.21.0",
     "hapi": "^13.4.1",
     "highcharts": "^4.2.5",
     "inert": "^4.0.0",
@@ -36,7 +37,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "PROD_DEV=1 webpack",
-    "start": "npm run build && node server/index.js"
+    "web": "export NODE_ENV=development && node server/index.js",
+    "start": "npm run build && npm run web"
   },
   "author": "Feng Zheng",
   "license": "MIT",
