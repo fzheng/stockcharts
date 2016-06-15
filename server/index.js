@@ -2,8 +2,8 @@
 
 const Hapi = require('hapi');
 const Path = require('path');
-const config = require('./config');
-const port = process.env.PORT || config.server.port;
+const config = require('config');
+const port = process.env.PORT || config.get('server.port');
 const server = new Hapi.Server({
   connections: {
     routes: {
@@ -15,7 +15,7 @@ const server = new Hapi.Server({
 });
 
 server.connection({
-  host: config.server.host,
+  host: config.get('server.host'),
   port: port
 });
 

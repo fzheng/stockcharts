@@ -1,7 +1,7 @@
 'use strict';
 
 const request = require('request');
-const config = require('../config');
+const config = require('config');
 const memcachedService = require('./memcached_service');
 
 
@@ -34,7 +34,7 @@ function getTimeSeriesChart (req, cb) {
     let qsString;
     try {
       if (!duration) {
-        duration = config.services.time_series.default_duration;
+        duration = config.get('services.time_series.default_duration');
       }
       qsString = JSON.stringify({
         Normalized: false,
@@ -57,12 +57,12 @@ function getTimeSeriesChart (req, cb) {
       return cb(e);
     }
 
-    makeHttpRequest(config.services.time_series.url, {"parameters": qsString}, function (reqError, reqData) {
+    makeHttpRequest(config.get('services.time_series.url'), {"parameters": qsString}, function (reqError, reqData) {
       if (reqError) {
         return cb(reqError);
       }
       console.log("[Request] gets '" + symbol + "' historical data");
-      memcachedService.setCache(memcachedKey, reqData, config.memcached.expiry.history, function () {
+      memcachedService.setCache(memcachedKey, reqData, config.get('memcached.expiry.history'), function () {
         cb(null, reqData); // won't output memcached error
       });
     });
@@ -78,12 +78,12 @@ function getAutoSuggestion (req, cb) {
       return cb(null, data);
     }
 
-    makeHttpRequest(config.services.lookup.url, {"input": input}, function (reqError, reqData) {
+    makeHttpRequest(config.get('services.lookup.url'), {"input": input}, function (reqError, reqData) {
       if (reqError) {
         return cb(reqError);
       }
       console.log("[Request] gets '" + input + "' autosuggestion");
-      memcachedService.setCache(memcachedKey, reqData, config.memcached.expiry.lookup, function (err) {
+      memcachedService.setCache(memcachedKey, reqData, config.get('memcached.expiry.lookup'), function (err) {
         cb(null, reqData);
       });
     });
