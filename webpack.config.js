@@ -1,5 +1,6 @@
 'use strict';
 
+const webpack = require('webpack');
 const autoprefixer = require('autoprefixer');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
@@ -19,7 +20,7 @@ module.exports = {
     app: ['./src/index'],
   },
   module: {
-    loaders: [
+    rules: [
       {
         test: /\.js$/,
         exclude: /node_modules/,
@@ -86,12 +87,17 @@ module.exports = {
       template: './src/html/template.html',
       inject: 'body',
     }),
-  ]),
-  postcss: [
-    autoprefixer({
-      browsers: ['last 2 versions'],
+    new webpack.LoaderOptionsPlugin({
+      // test: /\.xxx$/, // may apply this only for some modules
+      options: {
+        postcss: [
+          autoprefixer({
+            browsers: ['last 2 versions'],
+          }),
+        ]
+      }
     }),
-  ],
+  ]),
   resolve: {
     extensions: [
       '',
