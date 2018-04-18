@@ -1,20 +1,22 @@
 'use strict';
 
-const webpack = require("webpack");
-const autoprefixer = require("autoprefixer");
-const ExtractTextPlugin = require("extract-text-webpack-plugin");
-const HtmlWebpackPlugin = require("html-webpack-plugin");
-const PROD = JSON.parse(process.env.PROD_DEV || "0");
-const path = require("path");
+const autoprefixer = require('autoprefixer');
+const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
+
+const PROD = JSON.parse(process.env.PROD_DEV || '0');
+const path = require('path');
+
 const sassLoaders = [
-  "css-loader",
-  "postcss-loader",
-  "sass-loader?indentedSyntax=sass&includePaths[]=" + path.resolve(__dirname, "./src")
+  'css-loader',
+  'postcss-loader',
+  `sass-loader?indentedSyntax=sass&includePaths[]=${path.resolve(__dirname, './src')}`,
 ];
 
 module.exports = {
   entry: {
-    app: ['./src/index']
+    app: ['./src/index'],
   },
   module: {
     loaders: [
@@ -25,64 +27,80 @@ module.exports = {
         query: {
           cacheDirectory: true,
           presets: [
-            "react",
-            "es2015"
-          ]
-        }
+            'react',
+            'es2015',
+          ],
+        },
       },
       {
         test: /\.css$/,
-        loader: 'style-loader!css-loader'
+        loader: 'style-loader!css-loader',
       },
       {
         test: /\.eot(\?v=\d+\.\d+\.\d+)?$/,
-        loader: "file"
+        loader: 'file',
       },
       {
         test: /\.(woff|woff2)$/,
-        loader: "url?prefix=font/&limit=5000"
+        loader: 'url?prefix=font/&limit=5000',
       },
       {
         test: /\.ttf(\?v=\d+\.\d+\.\d+)?$/,
-        loader: "url?limit=10000&mimetype=application/octet-stream"
+        loader: 'url?limit=10000&mimetype=application/octet-stream',
       },
       {
         test: /\.svg(\?v=\d+\.\d+\.\d+)?$/,
-        loader: "url?limit=10000&mimetype=image/svg+xml"
+        loader: 'url?limit=10000&mimetype=image/svg+xml',
       },
       {
         test: /\.sass$/,
-        loader: ExtractTextPlugin.extract("style-loader", sassLoaders.join("!"))
-      }
-    ]
+        loader: ExtractTextPlugin.extract('style-loader', sassLoaders.join('!')),
+      },
+    ],
   },
   output: {
     filename: '[name].js',
-    path: path.join(__dirname, "./dist")
+    path: path.join(__dirname, './dist'),
   },
-  plugins: (
-    PROD ? [new webpack.optimize.UglifyJsPlugin({minimize: true})] : []).concat([
+  plugins: (PROD ? [
+    {
+      optimization: {
+        minimizer: [
+          new UglifyJSPlugin({
+            uglifyOptions: {
+              output: {
+                comments: false,
+              },
+              compress: {
+                drop_console: true,
+              },
+            },
+          }),
+        ],
+      },
+    },
+  ] : []).concat([
     new ExtractTextPlugin('[name].css'),
     new HtmlWebpackPlugin({
-      title: "StockCharts",
-      template: "./src/html/template.html",
-      inject: 'body'
-    })
+      title: 'StockCharts',
+      template: './src/html/template.html',
+      inject: 'body',
+    }),
   ]),
   postcss: [
     autoprefixer({
-      browsers: ['last 2 versions']
-    })
+      browsers: ['last 2 versions'],
+    }),
   ],
   resolve: {
     extensions: [
       '',
       '.js',
-      '.sass'
+      '.sass',
     ],
     modulesDirectories: [
       'src',
-      'node_modules'
-    ]
-  }
+      'node_modules',
+    ],
+  },
 };

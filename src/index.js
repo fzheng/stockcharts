@@ -2,4 +2,5 @@
 
 import 'bootstrap/dist/css/bootstrap.css';
 import './js/main';
-require("./css/base");
+
+require('./css/base');
