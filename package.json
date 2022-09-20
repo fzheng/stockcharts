@@ -27,7 +27,7 @@
     "jquery": "^3.3.1",
     "marked": "^0.3.19",
     "memcached": "^2.2.2",
-    "node-sass": "^4.8.3",
+    "node-sass": "^7.0.3",
     "postcss-loader": "^2.1.4",
     "react": "^16.3.2",
     "react-dom": "^16.3.2",
