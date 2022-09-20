@@ -13,28 +13,28 @@ exports.register = function (server, options, next) {
       validate: {
         payload: {
           symbol: Joi.string().regex(/^[a-zA-Z]{1,4}$/).required(),
-          duration: Joi.number().integer().min(1).optional()
+          duration: Joi.number().integer().min(1).optional(),
         },
-        failAction: utils.validationError
-      }
+        failAction: utils.validationError,
+      },
     },
-    handler: function (request, reply) {
+    handler(request, reply) {
       const req = {
-        symbol: request.payload.symbol
+        symbol: request.payload.symbol,
       };
       const duration = request.payload.duration;
       if (duration) {
         req.duration = duration;
       }
-      stockServices.getTimeSeriesChart(req, function (err, data) {
+      stockServices.getTimeSeriesChart(req, (err, data) => {
         reply(err, data);
       });
-    }
+    },
   });
 
   next();
 };
 
 exports.register.attributes = {
-  name: 'history'
+  name: 'history',
 };

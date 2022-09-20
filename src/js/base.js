@@ -1,11 +1,11 @@
 'use strict';
 
-import React from "react";
+import React from 'react';
 
 
 class BaseComponent extends React.Component {
-  _bind (...methods) {
-    methods.forEach((method) => this[method] = this[method].bind(this));
+  _bind(...methods) {
+    methods.forEach(method => this[method] = this[method].bind(this));
   }
 }
 

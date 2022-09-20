@@ -5,28 +5,28 @@ const config = require('config');
 const memcachedService = require('./memcached_service');
 
 
-function makeHttpRequest (url, qs, cb) {
+function makeHttpRequest(url, qs, cb) {
   request({
     method: 'GET',
-    url: url,
-    qs: qs,
-    json: true
-  }, function (error, response, body) {
+    url,
+    qs,
+    json: true,
+  }, (error, response, body) => {
     if (response.statusCode === 200) {
       return cb(null, body);
     }
-    const err = error || new Error('error: ' + response.statusCode);
+    const err = error || new Error(`error: ${response.statusCode}`);
     console.error(err);
     cb(err);
   });
 }
 
-function getTimeSeriesChart (req, cb) {
+function getTimeSeriesChart(req, cb) {
   const symbol = req.symbol;
   let duration = req.duration;
-  const memcachedKey = symbol + ':history';
+  const memcachedKey = `${symbol}:history`;
 
-  memcachedService.getCache(memcachedKey, function (err, data) {
+  memcachedService.getCache(memcachedKey, (err, data) => {
     if (data) {
       return cb(null, data);
     }
@@ -39,51 +39,51 @@ function getTimeSeriesChart (req, cb) {
       qsString = JSON.stringify({
         Normalized: false,
         NumberOfDays: duration,
-        DataPeriod: "Day",
+        DataPeriod: 'Day',
         Elements: [
           {
             Symbol: symbol,
-            Type: "price",
-            Params: ["ohlc"]
+            Type: 'price',
+            Params: ['ohlc'],
           },
           {
             Symbol: symbol,
-            Type: "volume"
-          }
-        ]
+            Type: 'volume',
+          },
+        ],
       });
     } catch (e) {
       console.error(e);
       return cb(e);
     }
 
-    makeHttpRequest(config.get('services.time_series.url'), {"parameters": qsString}, function (reqError, reqData) {
+    makeHttpRequest(config.get('services.time_series.url'), { parameters: qsString }, (reqError, reqData) => {
       if (reqError) {
         return cb(reqError);
       }
-      console.log("[Request] gets '" + symbol + "' historical data");
-      memcachedService.setCache(memcachedKey, reqData, config.get('memcached.expiry.history'), function () {
+      console.log(`[Request] gets '${symbol}' historical data`);
+      memcachedService.setCache(memcachedKey, reqData, config.get('memcached.expiry.history'), () => {
         cb(null, reqData); // won't output memcached error
       });
     });
   });
 }
 
-function getAutoSuggestion (req, cb) {
+function getAutoSuggestion(req, cb) {
   const input = req.input;
-  const memcachedKey = input + ':lookup';
+  const memcachedKey = `${input}:lookup`;
 
-  memcachedService.getCache(memcachedKey, function (err, data) {
+  memcachedService.getCache(memcachedKey, (err, data) => {
     if (data) {
       return cb(null, data);
     }
 
-    makeHttpRequest(config.get('services.lookup.url'), {"input": input}, function (reqError, reqData) {
+    makeHttpRequest(config.get('services.lookup.url'), { input }, (reqError, reqData) => {
       if (reqError) {
         return cb(reqError);
       }
-      console.log("[Request] gets '" + input + "' autosuggestion");
-      memcachedService.setCache(memcachedKey, reqData, config.get('memcached.expiry.lookup'), function (err) {
+      console.log(`[Request] gets '${input}' autosuggestion`);
+      memcachedService.setCache(memcachedKey, reqData, config.get('memcached.expiry.lookup'), (err) => {
         cb(null, reqData);
       });
     });
@@ -91,6 +91,6 @@ function getAutoSuggestion (req, cb) {
 }
 
 module.exports = {
-  getTimeSeriesChart: getTimeSeriesChart,
-  getAutoSuggestion: getAutoSuggestion
+  getTimeSeriesChart,
+  getAutoSuggestion,
 };

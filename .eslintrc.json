@@ -1,0 +1,18 @@
+{
+  "extends": ["airbnb-base"],
+  "plugins": [
+    "import",
+    "security",
+    "notice"
+  ],
+  "rules": {
+    "strict": 0,
+    "no-underscore-dangle": 0,
+    "global-require": 0,
+    "max-len": ["error", 140],
+    "no-plusplus": 0,
+    "import/no-unresolved": 1,
+    "func-names": 0,
+    "no-multi-spaces": ["error", { "ignoreEOLComments": true }]
+  }
+}
