@@ -25,3 +25,7 @@ Thumbs.db
 coverage/
 test-results/
 playwright-report/
+
+.claude/
+.github/
+nul
